@@ -1,0 +1,6 @@
+*.pyc
+__pycache__
+myvenv
+SurveyApp
+db.sqlite3
+.DS_Store
