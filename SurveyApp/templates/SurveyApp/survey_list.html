@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>GET IT STARTED</title>
-  </head>
-  <body>
+{% extends 'SurveyApp/decorator.html' %}
 
-  </body>
-</html>
+{% block content %}
+<div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__supporting-text">
+    <h4>설문조사 목록</h4>
+
+  <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>설문조사명</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for survey in survey_list %}
+    <tr>
+      <td>{{survey.id}}</td>
+      <td>{{survey.title}}</td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</table>
+</div>
+
+</div>
+
+{% endblock content %}

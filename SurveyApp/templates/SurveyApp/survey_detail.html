@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>SURVEY_DETAIL</title>
-  </head>
-  <body>
+{% extends 'SurveyApp/decorator.html' %}
 
-  </body>
-</html>
+{% block content %}
+<div class="survey11">
+
+{% for a in survey %}
+<form method="POST" name="surveyform" class="survey-form" onsubmit="return false">{% csrf_token %}
+   <h3>{{survey.title}}</h3>
+
+     <div name="question_answer_area">
+     <div name="question_area">
+       <!-- Right aligned menu below button -->
+       {% for que in question %}
+         <p> 질문 :
+           {{ que.title }}
+         </p>
+        <input type="hidden" name="limit"/>
+        {% if que.type == 'select'%}
+        <select>
+            {% for ans in answer %}
+              <option value='{{ans.id}}'>{{ans.ans_content}}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+        {% if que.type == 'checkbox' %}
+          <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
+            <input type="checkbox" id="checkbox1" class="mdl-checkbox__input">
+            <span class="mdl-checkbox__label">{{ans.ans_content}}</span>
+          </label>
+        {% endif %}
+        {% if que.type == 'radio'%}
+        {% endif %}
+        {% if que.type == 'textfield'%}
+        {% endif %}
+
+        {% endfor %}
+
+     <!--  <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
+         <input type="checkbox" id="checkbox1" class="mdl-checkbox__input" checked>
+         <span class="mdl-checkbox__label">Married</span>
+      </label> -->
+    </div>
+    <div name="answer_area">
+      <!-- Right aligned menu below button -->
+        <div class="mdl-textfield mdl-js-textfield">
+          <input class="mdl-textfield__input" type="text" name="content">
+          <label class="mdl-textfield__label" for="sample1">답변</label>
+        </div>
+        <button class="mdl-button mdl-button--mini-fab mdl-js-button" id="add_answer">
+          <i class="material-icons" role="presentation">add</i>
+          <span class="visuallyhidden">Add</span>
+        </button>
+    </div>
+    </div>
+</form>
+{% endfor %}
+</div>
+{% endblock content %}

@@ -11,43 +11,44 @@ class Survey(models.Model):
     available_start_dt = models.DateTimeField(default=timezone.now)
     available_end_dt = models.DateTimeField(default=timezone.now)
 
-    class Meta:
-        abstract = True
+    #class Meta:
+    #    abstract = True
     def __str__(self):
         return self.title
 
     def __repr__(self):
-        return "<Survey id={0!r}, title={1!r}, available_dt={2!r}>".\
-                format(self.id, self.title, self.available_dt)
+        return "<Survey id={0!r}, title={1!r}, available_start_dt={2!r}, available_end_dt={3!r}>".\
+                format(self.id, self.title, self.available_start_dt, self.available_end_dt)
 
-class SurveyInfo(Survey):
+class Question(models.Model):
     #survey_id=models.ForeignKey('SuveyApp.Survey')
-    #survey_id = models.ForeignKey('SurveyApp.Survey', on_delete=models.CASCADE)
-    type = models.CharField(max_length=15, null=False)
-    limit = models.IntegerField()
+    survey_id = models.ForeignKey('SurveyApp.Survey', on_delete=models.CASCADE, default='0')
+    type = models.CharField(max_length=15, default='select')
+    limit = models.IntegerField(default=0)
+    title = models.TextField()
 
     def __str__(self):
         return self.type
 
-class Question(models.Model):
-    surveyInfo_id = models.ForeignKey('SurveyApp.SurveyInfo', on_delete=models.CASCADE)
-    contents = models.TextField(null=False)
+class Answer(models.Model):
+    question_id = models.ForeignKey('SurveyApp.Question', on_delete=models.CASCADE)
+    ans_content = models.TextField(null=False)
 
     def __str__(self):
-        return self.contents
+        return self.content
 
 class User(models.Model):
-    survey_id = models.ForeignKey('SurveyApp.SurveyInfo', on_delete=models.CASCADE, default='0')
+    question_id = models.ForeignKey('SurveyApp.Question', on_delete=models.CASCADE, default='0')
     mobile = models.CharField(max_length=13)
-    name = models.CharField(max_length=20, null=False)
+    name = models.CharField(max_length=20, null=False, default='0')
 
     def __str__(self):
         return self.name
 
-class Answer(models.Model):
+class Entry(models.Model):
     user_id = models.ForeignKey('SurveyApp.User')
-    question_id = models.ForeignKey('SurveyApp.Question')
-    etc = models.TextField()
+    answer_id = models.ForeignKey('SurveyApp.Answer')
+    response = models.TextField()
 
     def __str__(self):
-        return self.name
+        return self.response

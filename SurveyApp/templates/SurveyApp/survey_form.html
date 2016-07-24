@@ -1,0 +1,116 @@
+{% extends 'SurveyApp/decorator.html' %}
+
+{% block content %}
+<script type='text/javascript'>
+  $(function() {
+    $('.mdl-menu__item').click(function() {
+      $('[name="type"]').val(j$(this).text());
+    });
+    $('[id^="add_"]').click(function() {
+        var $this = $(this);
+
+        if($this.attr('id') == 'add_question') {
+
+          $this.closest('[name^="question_answer_area"]').append(
+
+          )
+
+        } else if($this.attr('id') == 'add_answer') {
+          $this.closest('div').append(
+            '<div class="answer">'+
+          '<div class="mdl-textfield mdl-js-textfield">'+
+            '<input class="mdl-textfield__input" type="text" name="content">'+
+            '<label class="mdl-textfield__label" for="sample1">답변</label>'+
+          '</div>'+
+          '<button class="mdl-button mdl-button--mini-fab mdl-js-button" name="delete_answer">'+
+            '<i class="material-icons" role="presentation">delete</i>'+
+          '</button></div>'
+        );
+        }
+    });
+
+    $(document).on('click', '[name="delete_answer"]', function() {
+      var $this = $(this);
+      $this.closest('div').remove();
+    });
+
+    $('#add_survey').click(function() {
+        //<!--document.surveyform.action = 'http://localhost:8000/survey/form/survey/form/';-->
+        document.surveyform.submit();
+    });
+  });
+</script>
+
+           <div class="mdl-card mdl-cell mdl-cell--12-col">
+             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+               <h4 class="mdl-cell mdl-cell--12-col">설문조사 등록 폼</h4>
+              <p>
+
+              </p>
+               <form method="POST" name="surveyform" class="survey-form" onsubmit="return false">{% csrf_token %}
+                  <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input" type="text" id="sample1" name="title">
+                    <label class="mdl-textfield__label" for="sample1">Title</label>
+                  </div>
+
+                    <button id="menu-speed" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                    </button>
+                    <ul class="mdl-menu mdl-js-menu" for="menu-speed">
+                      <li class="mdl-menu__item">checkbox</li>
+                      <li class="mdl-menu__item">selectbox</li>
+                      <li class="mdl-menu__item">radio</li>
+                      <li class="mdl-menu__item">TextField</li>
+                    </ul>
+
+                    <div name="question_answer_area">
+                    <div name="question_area">
+                      <!-- Right aligned menu below button -->
+                      <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" name="question_title">
+                        <label class="mdl-textfield__label" for="sample1">질문</label>
+                      </div>
+                      <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" name="limit">
+                        <label class="mdl-textfield__label" for="sample1">limit</label>
+                      </div>
+
+                      <select name="type">
+                        <option value='checkbox'>checkbox</option>
+                        <option value='radio'>radio</option>
+                        <option value='select'>select</option>
+                        <option value='textfield'>textfield<option>
+                      </select>
+
+                      <button class="mdl-button mdl-button--mini-fab mdl-js-button" id="add_question">
+                        <i class="material-icons" role="presentation">add</i>
+                        <span class="visuallyhidden">Add</span>
+                      </button>
+                    <!--  <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
+                        <input type="checkbox" id="checkbox1" class="mdl-checkbox__input" checked>
+                        <span class="mdl-checkbox__label">Married</span>
+                     </label> -->
+                   </div>
+                   <div name="answer_area">
+                     <!-- Right aligned menu below button -->
+                       <div class="mdl-textfield mdl-js-textfield">
+                         <input class="mdl-textfield__input" type="text" name="content">
+                         <label class="mdl-textfield__label" for="sample1">답변</label>
+                       </div>
+                       <button class="mdl-button mdl-button--mini-fab mdl-js-button" id="add_answer">
+                         <i class="material-icons" role="presentation">add</i>
+                         <span class="visuallyhidden">Add</span>
+                       </button>
+                   </div>
+                   </div>
+              </form>
+              <button class="mdl-button mdl-button--mini-fab mdl-js-button" id="add_survey">
+                <i class="material-icons" role="presentation">add</i>
+                <span class="visuallyhidden">Add</span>
+              </button>
+            </div>
+          </div>
+
+
+
+{% endblock %}
