@@ -34,6 +34,7 @@ def survey_form(request) :
     if request.method == 'POST' :
         form = SurveyForm()
         survey = form.save(commit=False)
+        survey.title = request.POST['title']
         survey.save()
 
         form = QuestionForm()
