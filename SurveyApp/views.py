@@ -19,10 +19,14 @@ def survey_detail(request, id) :
 
     survey = Survey.objects.filter(id=id)
     question = Question.objects.filter(survey_id=survey).select_related().values('title', 'limit', 'type', 'id')
-    q_id = question[0].get('id')
-    answer = Answer.objects.filter(question_id=q_id).values('question_id', 'content')
+    q_id = Question.objects.filter(survey_id=survey).count()
+    if q_id > 0:
+        q_id = question[0].get('id')
+        answer = Answer.objects.filter(question_id=q_id).values('question_id', 'content')
+        return render(request, 'SurveyApp/survey_detail.html', {'survey':survey, 'question':question, 'answer':answer})
+    else :
+        return render(request, 'SurveyApp/survey_detail.html', {'survey':survey, 'question':question})
 
-    return render(request, 'SurveyApp/survey_detail.html', {'survey':survey, 'question':question, 'answer':answer})
 
 def survey_form(request) :
     # 설문 생성
