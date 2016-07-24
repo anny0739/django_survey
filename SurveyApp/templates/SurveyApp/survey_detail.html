@@ -18,27 +18,32 @@
         {% if que.type == 'select'%}
         <select>
             {% for ans in answer %}
-              <option value='{{ans.id}}'>{{ans.ans_content}}</option>
+              <option value='{{ans.id}}'>{{ans.content}}</option>
             {% endfor %}
         </select>
         {% endif %}
         {% if que.type == 'checkbox' %}
+          {% for ans in answer %}
           <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
             <input type="checkbox" id="checkbox1" class="mdl-checkbox__input">
-            <span class="mdl-checkbox__label">{{ans.ans_content}}</span>
+            <span class="mdl-checkbox__label">{{ans.content}}</span>
           </label>
+          {% endfor %}
         {% endif %}
         {% if que.type == 'radio'%}
+          {% for ans in answer %}
+        <label class="mdl-radio mdl-js-radio" for="radio1">
+          <input type="radio" id="radio1" class="mdl-radio__input">
+          <span class="mdl-radio__label">{{ans.content}}</span>
+        </label>
+          {% endfor %}
         {% endif %}
         {% if que.type == 'textfield'%}
         {% endif %}
 
         {% endfor %}
 
-     <!--  <label class="mdl-checkbox mdl-js-checkbox" for="checkbox1">
-         <input type="checkbox" id="checkbox1" class="mdl-checkbox__input" checked>
-         <span class="mdl-checkbox__label">Married</span>
-      </label> -->
+
     </div>
     <div name="answer_area">
       <!-- Right aligned menu below button -->

@@ -16,7 +16,7 @@ class QuestionForm(forms.ModelForm) :
 class AnswerForm(forms.ModelForm) :
     class Meta:
         model = Answer
-        fields = ('question_id', 'ans_content')
+        fields = ('question_id', 'content')
 
 class UserForm(forms.ModelForm) :
     class Meta:

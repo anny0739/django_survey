@@ -5,22 +5,27 @@ from .models import Survey, Question, Answer, User, Entry
 
 
 
-# Create your views here.
-
 logger = logging.getLogger(__name__)
 
 def survey_list(request) :
+    #설문 목록
+
     survey_list = Survey.objects.all()
     return render(request, 'SurveyApp/survey_list.html', {'survey_list':survey_list})
 
 def survey_detail(request, id) :
     #survey_detail = get_object_or_404(Survey, id=id)
+    #설문 항목
+
     survey = Survey.objects.filter(id=id)
-    question = Question.objects.filter(survey_id=survey).select_related().values('title', 'limit', 'type')
-    logger.error(question)
-    return render(request, 'SurveyApp/survey_detail.html', {'survey':survey, 'question':question})
+    question = Question.objects.filter(survey_id=survey).select_related().values('title', 'limit', 'type', 'id')
+    q_id = question[0].get('id')
+    answer = Answer.objects.filter(question_id=q_id).values('question_id', 'content')
+
+    return render(request, 'SurveyApp/survey_detail.html', {'survey':survey, 'question':question, 'answer':answer})
 
 def survey_form(request) :
+    # 설문 생성
 
     if request.method == 'POST' :
         form = SurveyForm()
@@ -33,29 +38,39 @@ def survey_form(request) :
         question.survey_id = survey
         question.title = request.POST['question_title']
         question.limit = request.POST['limit']
+        question.type = request.POST['type']
         question.save()
+
+        # 임시로 처리 (한 question에 대해서만 입력)
+        answer_contents = request.POST.getlist('content')
+
+        answer = AnswerForm()
+        answer = form.save(commit=False)
+        answer.question_id = question
+
+        for ans in answer_contents :
+            answer.content = ans
+            Answer.objects.create(question_id=question, content=ans)
 
         return redirect('SurveyApp.views.survey_detail', id=survey.id)
     else :
         form = SurveyForm()
         return render(request, 'SurveyApp/survey_form.html', {'form' : form})
 
-#def insert_survey(request) :
-    #form = request.POST
-    #survey = form.save(commit=False)
-    #question = form.save(commit=False)
-    #question.survey_id = survey.id
-    #survey.save()
-    #question.save()
+def survey_register(request) :
+    # 설문 응답
 
+    if request.method == 'POST' :
+        form = UserForm()
+        user = form.save()
+        user.save()
+        user = Suer.objects.get(id=user.id)
 
-    #titleArr = request.POST['title'];
-    #offset = 0
-    #for(tit in titleArr) {
-
-    #question = Question.objects.create(survey_id =survey.id,
-#        type = request.POST['type'], limit = request.POST['limit'],
-#        title = request.POST['question_title']
-#    )
-#        offset++;
-#    }
+        form = EntryForm()
+        entry = form.save(commit=False)
+        entry.id = user
+        entry.save()
+        return redirect('SurveyApp.views.entry_detail', id=user.survey_id)
+    else :
+        form = UserForm()
+        return redirect('SurveyApp.views.survey_detail')

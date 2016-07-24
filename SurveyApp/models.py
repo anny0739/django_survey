@@ -32,7 +32,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question_id = models.ForeignKey('SurveyApp.Question', on_delete=models.CASCADE)
-    ans_content = models.TextField(null=False)
+    content = models.TextField(null=False)
 
     def __str__(self):
         return self.content
